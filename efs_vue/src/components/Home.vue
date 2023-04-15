@@ -28,7 +28,7 @@
                         <img :src="require('@/assets/nonstock.jpg')" class="card-img-top" style="height: 15rem">
                         <div class="card-body">
                             <h5 class="card-title">Investments</h5>
-                            <a @click="" class="btn btn-primary">View Details</a>
+                            <a @click="viewInvestments" class="btn btn-primary">View Details</a>
                         </div>
                     </div>
                     <div class="card">
@@ -68,6 +68,11 @@ export default {
         viewCustomers() {
             router.push('/customer-list');
         },
+
+        viewInvestments() {
+            router.push('/customer-list');
+        },
+
         getUser() {
             if (localStorage.getItem("isAuthenticates") && JSON.parse(localStorage.getItem("isAuthenticates")) === true) {
                 this.validUserName = JSON.parse(localStorage.getItem("log_user"));
