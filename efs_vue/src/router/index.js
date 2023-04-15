@@ -4,6 +4,10 @@ import Auth from '@/components/Auth.vue'
 import Register from '@/components/Register'
 import CustomerList from '@/components/CustomerList'
 import CustomerCreate from '@/components/CustomerCreate'
+import InvestmentList from '@/components/InvestmentList'
+import InvestmentCreate from '@/components/InvestmentCreate'
+import StockList from '@/components/StockList'
+import StockCreate from '@/components/StockCreate'
 
 const routes = [
   {
@@ -37,6 +41,48 @@ const routes = [
     path: '/customer-create/:pk',
     name: 'CustomerUpdate',
     component: CustomerCreate
+  },
+  {
+
+    path: '/investment-list',
+    name: 'InvestmentList',
+    component: InvestmentList
+  },
+  {
+    path: '/investment-list/:msg',
+    name: 'InvestmentUpdatedList',
+    component: InvestmentList
+  },
+  {
+    path: '/investment-create',
+    name: 'InvestmentCreate',
+    component: InvestmentCreate
+  },
+  {
+    path: '/investment-create/:pk',
+    name: 'InvestmentUpdate',
+    component: InvestmentCreate
+  },
+  {
+
+    path: '/stock-list',
+    name: 'StockList',
+    component: StockList
+  },
+  {
+    path: '/stock-list/:msg',
+    name: 'StockUpdatedList',
+    component: StockList
+  },
+  {
+    path: '/stock-create',
+    name: 'StockCreate',
+    component: StockCreate
+  },
+  {
+    path: '/stock-create/:pk',
+    name: 'StockUpdate',
+    component: StockCreate
   },
   {
     path: '/auth',

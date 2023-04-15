@@ -15,15 +15,15 @@
             <div class="col-12 col-md-10 col-lg-10 col-12 align-items-center justify-content-center">
                 <div class="alert alert-success"
                 v-if="showMsg === 'new'"
-                :value="true"> New Investment has been added.
+                :value="true"> New Stock has been added.
                 </div>
                 <div class="alert alert-success"
                 v-if="showMsg === 'update'"
-                :value="true"> Investment information has been updated.
+                :value="true"> Stock information has been updated.
                 </div>
                 <div class="alert alert-success"
                 v-if="showMsg === 'deleted'"
-                :value="true"> Selected investment has been deleted.
+                :value="true"> Selected Stock has been deleted.
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="row align-items-center justify-content-center">
             <div class="d-md-none" id="collapsable-card" style="width: 80%">
                 <button type="button" class="btn btn-primary"
-                @click="addNewInvestment"
+                @click="addNewStock"
                 style="background-color: white; border-color: white">
                 <svg xmlns="http://www.w3.org/2000/svg"
                 width="50"
@@ -42,30 +42,29 @@
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
                 </svg>
                 </button>
-                <div class="card" v-for="investment in investments" v-bind:key="investment">
-                    <div class="card-header" :id="'heading' + investment.pk">
+                <div class="card" v-for="stock in stocks" v-bind:key="stock">
+                    <div class="card-header" :id="'heading' + stock.pk">
                         <button class="btn btn-link collapsed"
                         data-bs-toggle="collapse"
-                        :data-bs-target="'#collapse' + investment.pk"
+                        :data-bs-target="'#collapse' + stock.pk"
                         aria-expanded="true"
-                        :aria-controls="'collapse' + investment.pk">
-                        <h6 style="color: #0275d8; float: left">Customer {{investment.cust_number}} - {{investment.category}} investment</h6>
+                        :aria-controls="'collapse' + stock.pk">
+                        <h6 style="color: #0275d8; float: left">Customer {{stock.cust_number}} - {{stock.name}} stock</h6>
                         </button>
                     </div>
-                    <div :id="'collapse' + investment.pk"
+                    <div :id="'collapse' + stock.pk"
                     class="collapse"
-                    :aria-labelledby="'heading' + investment.pk"
+                    :aria-labelledby="'heading' + stock.pk"
                     data-bs-parent="#collapsable-card">
                     <div class="card-body">
-                        <p><b>Customer #:</b> {{investment.cust_number}}</p>
-                        <p><b>Category:</b> {{investment.category}}</p>
-                        <p><b>Description:</b> {{investment.description}}</p>
-                        <p><b>Acquired Value:</b> {{investment.acquired_value}}</p>
-                        <p><b>Acquired Date:</b> {{investment.acquired_date}}</p>
-                        <p><b>Recent Value:</b> {{investment.recent_value}}</p>
-                        <p><b>Recent Date:</b> {{investment.recent_date}}</p>
+                        <p><b>Customer #:</b> {{stock.cust_number}}</p>
+                        <p><b>Symbol:</b> {{stock.symbol}}</p>
+                        <p><b>Name:</b> {{stock.name}}</p>
+                        <p><b>Shares:</b> {{stock.shares}}</p>
+                        <p><b>Purchase Price:</b> {{stock.purchase_price}}</p>
+                        <p><b>Purchase Date:</b> {{stock.purchase_date}}</p>
                         <div class="btn-group">
-                            <button @click="updateInvestment(investment)"
+                            <button @click="updateStock(stock)"
                             style="background-color: transparent; padding: 0;">
                             <svg xmlns="http://www.w3.org/2000/svg"
                             width="20"
@@ -76,9 +75,9 @@
                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                             </svg>
                             </button>
-                            <button @click="deleteInvestment(investment)"
+                            <button @click="deleteStock(stock)"
                             style="background-color: transparent; padding: 0;">
-                            <svg @click="deleteInvestment"
+                            <svg @click="deleteStock"
                             xmlns="http://www.w3.org/2000/svg"
                             width="20"
                             height="20"
@@ -100,27 +99,25 @@
                 <thead>
                     <tr>
                         <th scope="col">Customer #</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Acquired Value</th>
-                        <th scope="col">Acquired Date</th>
-                        <th scope="col">Recent Value</th>
-                        <th scope="col">Recent Date</th>
+                        <th scope="col">Symbol</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Shares</th>
+                        <th scope="col">Purchase Price</th>
+                        <th scope="col">Purchase Date</th>
                         <th scope="col">Update</th>
                         <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for = "investment in investments" v-bind:key="investment">
+                    <tr v-for = "stock in stocks" v-bind:key="stock">
                         <!-- Should be customer.cust_number but not working -->
-                        <th scope="row">{{investment.cust_number}}</th>
-                        <td>{{investment.category}}</td>
-                        <td>{{investment.description}}</td>
-                        <td>{{investment.acquired_value}}</td>
-                        <td>{{investment.acquired_date}}</td>
-                        <td>{{investment.recent_value}}</td>
-                        <td>{{investment.recent_date}}</td>
-                        <td @click="updateInvestment(investment)">
+                        <th scope="row">{{stock.cust_number}}</th>
+                        <td>{{stock.symbol}}</td>
+                        <td>{{stock.name}}</td>
+                        <td>{{stock.shares}}</td>
+                        <td>{{stock.purchase_price}}</td>
+                        <td>{{stock.purchase_date}}</td>
+                        <td @click="updateStock(stock)">
                             <button style="background-color: transparent; padding: 0;">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                 width="16"
@@ -133,9 +130,9 @@
                                 </svg>
                             </button>
                         </td>
-                        <td @click="deleteInvestment(investment)">
+                        <td @click="deleteStock(stock)">
                             <button style="background-color: transparent; padding: 0;">
-                                <svg @click="deleteInvestment"
+                                <svg @click="deleteStock"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="16"
                                 height="16"
@@ -151,7 +148,7 @@
                 </table>
                 <button type="button"
                 class="btn btn-primary"
-                @click="addNewInvestment">Add New Investment</button>
+                @click="addNewStock">Add New Stock</button>
             </div>
         </div>
     </div>
@@ -165,27 +162,26 @@ import {APIService} from '../http/APIService';
 const apiService = new APIService();
 
 export default {
-    name: "InvestmentList",
+    name: "StockList",
     data: () => ({
-        investments: [],
+        stocks: [],
         validUserName: "Guest",
-        investmentSize: 0,
+        stockSize: 0,
         showMsg: '',
         isMobile: false,
         headers: [
             {text: 'Customer Number', sortable: false, align: 'left',},
-            {text: 'Category', sortable: false, align: 'left',},
-            {text: 'Description', sortable: false, align: 'left',},
-            {text: 'Acquired_Value', sortable: false, align: 'left',},
-            {text: 'Acquired_Date', sortable: false, align: 'left',},
-            {text: 'Recent_Value', sortable: false, align: 'left',},
-            {text: 'Recent_Date', sortable: false, align: 'left',},
+            {text: 'Symbol', sortable: false, align: 'left',},
+            {text: 'Namr', sortable: false, align: 'left',},
+            {text: 'Shares', sortable: false, align: 'left',},
+            {text: 'Purchase_Price', sortable: false, align: 'left',},
+            {text: 'Purchase_Date', sortable: false, align: 'left',},
             {text: 'Update', sortable: false, align: 'left',},
             {text: 'Delete', sortable: false, align: 'left',}
         ],
     }),
     mounted() {
-        this.getInvestments();
+        this.getStocks();
         this.showMessages();
     },
     methods: {
@@ -201,10 +197,10 @@ export default {
                 this.showMsg = this.$route.params.msg;
             }
         },
-        getInvestments() {
-            apiService.getInvestmentList().then(response => {
-                this.investments = response.data.data;
-                this.investmentSize = this.investments.length;
+        getStocks() {
+            apiService.getStockList().then(response => {
+                this.stocks = response.data.data;
+                this.stockSize = this.stocks.length;
                 if (localStorage.getItem("isAuthenticates") && JSON.parse(localStorage.getItem("isAuthenticates")) === true) {
                     this.validUserName = JSON.parse(localStorage.getItem("log_user"));
                 }
@@ -217,23 +213,23 @@ export default {
                 }
             });
         },
-        addNewInvestment() {
+        addNewStock() {
             if (localStorage.getItem("isAuthenticates") && JSON.parse(localStorage.getItem("isAuthenticates")) === true) {
-                router.push('/investment-create');
+                router.push('/stock-create');
             }
             else {
                 router.push("/auth");
             }
         },
-        updateInvestment(investment) {
-            router.push('/investment-create/' + investment.pk);
+        updateStock(stock) {
+            router.push('/stock-create/' + stock.pk);
         },
-        deleteInvestment(investment) {
+        deleteStock(stock) {
             if(confirm("Do you really want to delete?")) {
-                apiService.deleteInvestment(investment.pk).then(response => {
+                apiService.deleteStock(stock.pk).then(response => {
                     if (response.status === 204) {
-                         router.push('/investment-list/deleted/')
-                         this.getInvestments()
+                         router.push('/stock-list/deleted/')
+                         this.getStocks()
                     }
                 }).catch(error => {
                     if (error.response.status === 401) {

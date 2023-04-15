@@ -12,8 +12,6 @@
                 </blockquote>
             </div>
         </div>
-    </div>
-    <div class="container-fluid">
         <div class="row align-items-center justify-content-center">
             <div class="col col-12 col-sm-10 col-md-10">
                 <div class="card-group">
@@ -35,7 +33,7 @@
                         <img :src="require('@/assets/stocks.jpg')" class="card-img-top" style="height: 15rem">
                         <div class="card-body">
                             <h5 class="card-title">Stocks</h5>
-                            <a @click="" class="btn btn-primary">View Details</a>
+                            <a @click="viewStocks" class="btn btn-primary">View Details</a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +68,10 @@ export default {
         },
 
         viewInvestments() {
-            router.push('/customer-list');
+            router.push('/investment-list');
+        },
+        viewStocks() {
+            router.push('/stock-list');
         },
 
         getUser() {
